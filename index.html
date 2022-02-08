@@ -149,6 +149,9 @@
 	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 		integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 		crossorigin=""></script>
+		<script>
+			src = 'data/western_wa_golf.geojson'
+		</script>
 	<!-- then Simple Statistics -->
 	<script src='https://unpkg.com/simple-statistics@7.7.0/dist/simple-statistics.min.js'></script>
 	<script>
@@ -195,7 +198,7 @@
 			"Weekend_Twilight":"Weekend_Twilight"
 		}
 
-		$.getJSON("/Data/western_wa_golf.geojson", function (data) {
+		$.getJSON("Data/western_wa_golf.geojson", function (data) {
 			// jQuery method uses AJAX request for the GeoJSON data
 			drawMap(data);
 		});
