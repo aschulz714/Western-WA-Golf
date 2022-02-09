@@ -156,30 +156,69 @@
 	<script src='https://unpkg.com/simple-statistics@7.7.0/dist/simple-statistics.min.js'></script>
 	<script>
 		// initial Leaflet map options
-		const options = {
+		
+		
+		//L.DomUtil.get("dropdown-ui");
+
+		// request a basemap tile layer and add to the map
+		 var cardo = L.tileLayer(
+			'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+				subdomains: 'abcd',
+				maxZoom: 16
+			});
+		var	world_imagery = L.tileLayer(
+				'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+					attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+				subdomains: 'abcd',
+				maxZoom: 16
+				});
+
+			const options = {
 			zoomSnap: .1,
 			//center: [40, -90],
 			//zoom: 4
-			zoomControl: false
+			zoomControl: false,
+			layers: [cardo, world_imagery]
 		}
 
 
 
 		// create Leaflet map and apply options
 		const map = L.map('map', options);
+
 		new L.control.zoom({
 			position: 'bottomright'
 		}).addTo(map);
 
-		//L.DomUtil.get("dropdown-ui");
+		var baseMaps = {
+			"Satellite": world_imagery,
+			"Basic": cardo,
+			
+		};
 
-		// request a basemap tile layer and add to the map
-		 L.tileLayer(
-			'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-				subdomains: 'abcd',
-				maxZoom: 16
-		 	}).addTo(map);
+		L.control.layers(baseMaps,null, {
+			position: 'bottomright',
+			sortLayers: world_imagery, cardo,
+			sortFunction: function(cardo, world_imagery){return [cardo,world_imagery].sort();}}
+			).addTo(map);
+
+	//	var layerInfo = {
+	//		twostarLayer,
+	//	}
+		
+		//var sourcesLabels = {
+		//	"<b style='color:black'>2 Stars</b>": twostarLayer,
+		//	"<b style='color:black'>3 Stars</b>": threestarLayer,
+		//	"<b style='color:black'>4 Stars</b>": fourstarLayer,
+		//	"<b style='color:black'>5 Stars</b>": fivestarLayer
+
+	//	}
+		
+	//	L.control.layers(null,sourceLabels, {
+	//		position:'bottomleft',
+	//		collapsed: false
+	//	})
 
 		// set global variables for map layer,
 		// mapped attribute, and normalizing attribute
@@ -266,9 +305,11 @@
 				});
 
 				let tooltipInfo = `<b>${props["Name"]}</b><br>
-				Green Fee:$${props[attributeValue]}`;
+				Green Fee:$${props[attributeValue]}<br>
+				<a target="_blank" href='${props["Website"]}'>Tee Times</a>`;
+			
 
-				layer.bindTooltip(tooltipInfo, {
+				layer.bindPopup(tooltipInfo, {
 					sticky: true
 				});
 			});
