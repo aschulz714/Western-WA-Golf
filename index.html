@@ -14,7 +14,7 @@
 		crossorigin="" />
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">"
-		
+
 	<style>
 		body {
 			background: #20282e;
@@ -95,8 +95,11 @@
 				<section>
 					<h3 class="py-2">Green Fees</h3>
 					<p>I made this map for my girlfriend because I like golfing with her and she's hot. </p>
-					<p>Green fees are available by weekday vs. weekend and time of day from the dropdown. Colors indicate favorable green fees (colored green) to expensive green fees (colored red). Hover over the course for name and given fee.
-					</p>The goal is to web scrape green fees from courses' websites, but it is highly unstructured data. Data was entered manually and not entirely accurate. This is merely a test. 
+					<p>Green fees are available by weekday vs. weekend and time of day from the dropdown. Colors
+						indicate favorable green fees (colored green) to expensive green fees (colored red). Hover over
+						the course for name and given fee.
+					</p>The goal is to web scrape green fees from courses' websites, but it is highly unstructured data.
+					Data was entered manually and not entirely accurate. This is merely a test.
 
 					</p>
 				</section>
@@ -149,32 +152,32 @@
 	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 		integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 		crossorigin=""></script>
-		<script>
-			src = 'data/western_wa_golf.geojson'
-		</script>
+	<script>
+		src = 'data/western_wa_golf.geojson'
+	</script>
 	<!-- then Simple Statistics -->
 	<script src='https://unpkg.com/simple-statistics@7.7.0/dist/simple-statistics.min.js'></script>
 	<script>
 		// initial Leaflet map options
-		
-		
+
+
 		//L.DomUtil.get("dropdown-ui");
 
 		// request a basemap tile layer and add to the map
-		 var cardo = L.tileLayer(
+		var cardo = L.tileLayer(
 			'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 				subdomains: 'abcd',
 				maxZoom: 16
 			});
-		var	world_imagery = L.tileLayer(
-				'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-					attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+		var world_imagery = L.tileLayer(
+			'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+				attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
 				subdomains: 'abcd',
 				maxZoom: 16
-				});
+			});
 
-			const options = {
+		const options = {
 			zoomSnap: .1,
 			//center: [40, -90],
 			//zoom: 4
@@ -194,31 +197,34 @@
 		var baseMaps = {
 			"Satellite": world_imagery,
 			"Basic": cardo,
-			
+
 		};
 
-		L.control.layers(baseMaps,null, {
+		L.control.layers(baseMaps, null, {
 			position: 'bottomright',
-			sortLayers: world_imagery, cardo,
-			sortFunction: function(cardo, world_imagery){return [cardo,world_imagery].sort();}}
-			).addTo(map);
+			sortLayers: world_imagery,
+			cardo,
+			sortFunction: function (cardo, world_imagery) {
+				return [cardo, world_imagery].sort();
+			}
+		}).addTo(map);
 
-	//	var layerInfo = {
-	//		twostarLayer,
-	//	}
-		
+		//	var layerInfo = {
+		//		twostarLayer,
+		//	}
+
 		//var sourcesLabels = {
 		//	"<b style='color:black'>2 Stars</b>": twostarLayer,
 		//	"<b style='color:black'>3 Stars</b>": threestarLayer,
 		//	"<b style='color:black'>4 Stars</b>": fourstarLayer,
 		//	"<b style='color:black'>5 Stars</b>": fivestarLayer
 
-	//	}
-		
-	//	L.control.layers(null,sourceLabels, {
-	//		position:'bottomleft',
-	//		collapsed: false
-	//	})
+		//	}
+
+		//	L.control.layers(null,sourceLabels, {
+		//		position:'bottomleft',
+		//		collapsed: false
+		//	})
 
 		// set global variables for map layer,
 		// mapped attribute, and normalizing attribute
@@ -234,7 +240,7 @@
 			"Weekend_Early_Bird": "Weekend_Early_Bird",
 			"Weekend_Prime_Time": "Weekend_Prime_Time",
 			"Weekend_Afternoon": "Weekend_Afternoon",
-			"Weekend_Twilight":"Weekend_Twilight"
+			"Weekend_Twilight": "Weekend_Twilight"
 		}
 
 		$.getJSON("Data/westernwagolf.geojson", function (data) {
@@ -242,7 +248,7 @@
 			drawMap(data);
 		});
 
-		
+
 		var commonStyles = {
 			weight: 1,
 			stroke: 1,
@@ -253,7 +259,7 @@
 			const dataLayer = L.geoJSON(data, {
 				pointToLayer: function (feature, latlng) {
 					//console.log(feature.properties["PROFIT"]);
-					return L.circleMarker(latlng,commonStyles)
+					return L.circleMarker(latlng, commonStyles)
 				},
 				style: function (feature) {
 					return {
@@ -289,6 +295,7 @@
 			addUi(dataLayer);
 			updateMap(dataLayer);
 			addLegend();
+			screener(dataLayer);
 		}
 
 
@@ -304,17 +311,17 @@
 					fillColor: getColor(props[attributeValue], breaks)
 				});
 
-				let tooltipInfo = `<b>${props["Name"]}</b><br>
+				let popupInfo = `<b>${props["Name"]}</b><br>
 				Green Fee:$${props[attributeValue]}<br>
-				<a target="_blank" href='${props["Website"]}'>Tee Times</a>`;
-			
+				<b><a target="_blank" rel="noopener noreferrer" href='${props["Website"]}'>Tee Times</a></b>`;
 
-				layer.bindPopup(tooltipInfo, {
+
+				layer.bindPopup(popupInfo, {
 					sticky: true
 				});
 			});
 
-			
+
 			updateLegend(breaks);
 
 		}
@@ -413,6 +420,43 @@
 				updateMap(dataLayer);
 			});
 
+		}
+
+		function screener(dataLayer) {
+			//	const screenerControl = L.control({
+			//	position: 'bottomleft'
+			//});
+
+			dataLayer.eachLayer(function (layer) {
+					var twostarLayer = []
+					var threestarLayer = []
+					var fourstarLayer = []
+					var fivestarLayer = []
+
+					const rating = layer.feature.properties.Rating;
+				// 	if (rating <= breaks[0][1]) {
+				// 		return '#32FF15';
+				// 	} else if (rating <= breaks[1][1]) {
+				// 		return '#9BCE04';
+				// 	} else if (rating <= breaks[2][1]) {
+				// 		return '#E8FD0F';
+				// 	} else if (rating <= breaks[3][1]) {
+				// 		return '#FC3A2B'
+				// 	} else if (rating <= breaks[4][1]) {
+				// 		return '#CA190B'
+				// 	}
+
+				// }
+
+				console.log(props)
+
+
+
+
+			});
+
+
+		//	screenerControl.addTo(map);
 		}
 	</script>
 </body>
